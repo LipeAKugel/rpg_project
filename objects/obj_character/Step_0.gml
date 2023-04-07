@@ -27,3 +27,36 @@ if place_meeting(x,y+vveloc,obj_wall) {
 }
 
 y += vveloc;
+
+// Rotação
+
+switch dir {
+	case 0:
+		sprite_index = spr_personagem_parado_direita;
+		break;
+	case 1:
+		sprite_index = spr_personagem_parado_cima;
+		break;
+	case 2:
+		sprite_index = spr_personagem_parado_esquerda;
+		break;
+	case 3:
+		sprite_index = spr_personagem_parado_baixo;
+		break;
+}
+
+if vveloc<0 {
+	dir = 1;
+	sprite_index = spr_personagem_correndo_cima;
+} else if vveloc>0 {
+	dir = 3;
+	sprite_index = spr_personagem_correndo_baixo;
+}
+
+if hveloc>0 {
+	dir = 0;
+	sprite_index = spr_personagem_correndo_direita;
+} else if hveloc<0 {
+	dir = 2;
+	sprite_index = spr_personagem_correndo_esquerda;
+}

@@ -3,8 +3,8 @@
   "resourceVersion": "1.0",
   "name": "obj_character",
   "spriteId": {
-    "name": "spr_character",
-    "path": "sprites/spr_character/spr_character.yy",
+    "name": "spr_personagem_parado_baixo",
+    "path": "sprites/spr_personagem_parado_baixo/spr_personagem_parado_baixo.yy",
   },
   "solid": false,
   "visible": true,

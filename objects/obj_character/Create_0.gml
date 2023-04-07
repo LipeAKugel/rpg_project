@@ -10,4 +10,7 @@ hveloc = 0;
 vveloc = 0;
 veloc = 2;
 
+// Rotation
+dir = 0;
+
 
