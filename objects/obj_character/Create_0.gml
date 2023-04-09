@@ -8,6 +8,7 @@ left = 0;
 
 hveloc = 0;
 vveloc = 0;
+veloc_dir = 0;
 veloc = 2;
 
 // Rotation
@@ -21,6 +22,6 @@ dash_cooldown_timer = dash_cooldown;
 dash_timer = dash_duration;
 
 // State
-state = "walk";
+state = scr_character_walk;
 
 

@@ -8,29 +8,26 @@ function scr_character_walk(){
 	right = keyboard_check(vk_right);
 	left = keyboard_check(vk_left);
 
-	hveloc = (right - left) * veloc;
-
-	if place_meeting(x+hveloc,y,obj_wall) {
-		if !place_meeting(x+sign(hveloc),y,obj_wall) {
-			x += sign(hveloc);
-		}
-		hveloc = 0;
+	// Get the movement direction.
+	hveloc = (right - left);
+	vveloc = (down - up);
+	
+	veloc_dir = point_direction(x,y,x+hveloc,y+vveloc);
+	
+	// Set the horizontal or vertical velocity if the player isn't idle.
+	if hveloc != 0 || vveloc != 0 {
+		hveloc = lengthdir_x(veloc, veloc_dir);
+		vveloc = lengthdir_y(veloc, veloc_dir);
 	}
+	
+	// Check for collision.
+	scr_check_collision();
 
 	x += hveloc;
 
-	vveloc = (down - up) * veloc;
-
-	if place_meeting(x,y+vveloc,obj_wall) {
-		if !place_meeting(x,y+sign(vveloc),obj_wall) {
-			y += sign(vveloc);
-		}
-		vveloc = 0;
-	}
-
 	y += vveloc;
 
-	// Rotação
+	// Rotation
 	switch dir {
 		case 0:
 			sprite_index = spr_personagem_parado_direita;
@@ -45,7 +42,8 @@ function scr_character_walk(){
 			sprite_index = spr_personagem_parado_baixo;
 			break;
 	}
-
+	
+	// Set the character's walking sprite rotation.
 	if vveloc < 0 {
 		dir = 1;
 		sprite_index = spr_personagem_correndo_cima;
@@ -84,23 +82,10 @@ function scr_character_dash(){
 				vveloc = dash_speed;
 		}
 		
-		// Check for horizontal collision.
-		if place_meeting(x+hveloc,y,obj_wall) {
-			if !place_meeting(x+sign(hveloc),y,obj_wall) {
-				x += sign(hveloc);
-			}
-			hveloc = 0;
-		}
+		// Check for collision.
+		scr_check_collision();
 		
 		x += hveloc;
-		
-		// Check for vertical collision.
-		if place_meeting(x,y+vveloc,obj_wall) {
-			if !place_meeting(x,y+sign(vveloc),obj_wall) {
-				y += sign(vveloc);
-			}
-			vveloc = 0;
-		}
 		
 		y += vveloc;
 		
@@ -113,6 +98,6 @@ function scr_character_dash(){
 	} else {
 		dash_timer = dash_duration;
 		dash_cooldown_timer = dash_cooldown;
-		state = "walk";
+		state = scr_character_walk;
 	}
 }
