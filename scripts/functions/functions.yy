@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "collision_scripts",
+  "name": "functions",
   "isDnD": false,
   "isCompatibility": false,
   "parent": {

@@ -7,7 +7,7 @@
     "path": "sprites/spr_collision_wall/spr_collision_wall.yy",
   },
   "solid": false,
-  "visible": true,
+  "visible": false,
   "managed": true,
   "spriteMaskId": null,
   "persistent": false,

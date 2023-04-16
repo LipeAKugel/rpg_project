@@ -1,19 +1,47 @@
 // Script assets have changed for v2.3.0 see
 // https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+function scr_check_character(){
+	// Chase the player if it gets too close.
+	if distance_to_object(obj_character) <= chasing_dist {
+		chasing = true;
+	} else {
+		chasing = false;
+	}
+}
+
+function scr_slime_check_hit(){
+	
+	if hit {
+		var x1 = obj_character.x;
+		var y1 = obj_character.y;
+		veloc_dir = point_direction(x1,y1,x,y);
+		state = scr_slime_hit;
+		hit_alarm = hit_duration;
+	}
+	
+}
+
 function scr_slime_choose(){
 	
+	if chasing {
+		next_state = scr_slime_chasing;
+	} else {
+		next_state = choose(scr_slime_idle, scr_slime_walk);
+		state_timer = irandom_range(120,240);	
+	}
 	
-	next_state = choose(scr_slime_idle, scr_slime_walk);
-	
+	// Set the stage.
 	if next_state == scr_slime_walk {
 		state = scr_slime_walk;
 		// Choose a random direction to walk.
 		veloc_dir = irandom_range(0,359);
 	} else if next_state == scr_slime_idle {
 		state = scr_slime_idle;
+	} else if next_state == scr_slime_chasing {
+		state = scr_slime_chasing;
+	} else if next_state == scr_slime_hit {
+		state = scr_slime_hit;
 	}
-	
-	state_timer = irandom_range(120,240);
 }
 
 function scr_slime_walk(){
@@ -36,6 +64,7 @@ function scr_slime_walk(){
 		vveloc = 0;
 		state = scr_slime_choose;
 	}
+	
 }
 
 function scr_slime_idle(){
@@ -46,6 +75,7 @@ function scr_slime_idle(){
 	if state_timer <= 0 {
 		state = scr_slime_choose;
 	}
+	
 }
 
 function scr_slime_chasing() {
@@ -65,7 +95,35 @@ function scr_slime_chasing() {
 	x += hveloc;
 	y += vveloc;
 	
-	if distance_to_object(obj_character) > chasing_dist {
+	// Check the character's distance.
+	scr_check_character();
+	if chasing == false {
 		state = scr_slime_choose;
 	}
+	
+}
+
+function scr_slime_hit() {
+	
+	var _kb_speed = round(obj_character.knockback*(1-knockback_res));
+	
+	// Take knockback
+	hveloc = lengthdir_x(_kb_speed, veloc_dir);
+	vveloc = lengthdir_y(_kb_speed, veloc_dir);
+	
+	// Check collision.
+	scr_check_collision();
+	
+	x += hveloc;
+	y += vveloc;
+	
+	// End hit state if the alarm reaches 0.
+	if hit_alarm == 0 {
+		hit = false;
+		invulnerability = false;
+		state = scr_slime_choose;
+	}
+	
+	hit_alarm -= 1;
+	
 }

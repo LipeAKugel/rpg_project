@@ -1,8 +1,19 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+
+function scr_character_check_hit(){
+	
+	if hit {
+		var x1 = enemy.x;
+		var y1 = enemy.y;
+		veloc_dir = point_direction(x1,y1,x,y);
+		state = scr_character_hit;
+		hit_alarm = hit_duration;
+	}
+	
+}
+
 function scr_character_walk(){
 	
-	// Movement and Collision
+	#region Movement and Collision
 	up = keyboard_check(vk_up);
 	down = keyboard_check(vk_down);
 	right = keyboard_check(vk_right);
@@ -26,8 +37,10 @@ function scr_character_walk(){
 	x += hveloc;
 
 	y += vveloc;
-
-	// Rotation
+	
+	#endregion
+	
+	#region Rotation
 	switch dir {
 		case 0:
 			sprite_index = spr_personagem_parado_direita;
@@ -60,9 +73,28 @@ function scr_character_walk(){
 		sprite_index = spr_personagem_correndo_esquerda;
 	}
 	
+	#endregion
+	
+	#region Dash
+	// Dash if "z" is pressed.
+	if dash_cooldown_timer <= 0 {
+		if keyboard_check_pressed(ord("Z")) {
+			state = scr_character_dash;
+		}
+	}
+	#endregion
+	
+	#region Attack
+	space = keyboard_check_pressed(vk_space);
+	if space {
+		image_index = 0;
+		state = scr_character_attack;
+		scr_create_attack_hitbox();
+	}
+	#endregion
+	
 	dash_cooldown_timer -= 1;
 }
-
 
 function scr_character_dash(){
 	// Dash for the set amount of time.
@@ -100,4 +132,99 @@ function scr_character_dash(){
 		dash_cooldown_timer = dash_cooldown;
 		state = scr_character_walk;
 	}
+}
+	
+function scr_character_attack(){
+	
+	switch dir {
+		
+		case 0: 
+			sprite_index = spr_personagem_atacando_direita;
+			break;
+		case 1:
+			sprite_index = spr_personagem_atacando_cima;
+			break;
+		case 2:
+			sprite_index = spr_personagem_atacando_esquerda;
+			break;
+		case 3:
+			sprite_index = spr_personagem_atacando_baixo;
+			break;
+	}
+	
+	if image_index >= 5 {
+		state = scr_character_walk;
+	}
+	
+}
+	
+function scr_create_attack_hitbox(){
+	
+	switch dir {
+		case 0:
+			// Right.
+			instance_create_layer(x+12,y,"Instances",obj_attack_hitbox);
+			break;
+		case 1:
+			// Up.
+			instance_create_layer(x,y-12,"Instances",obj_attack_hitbox);
+			break;
+		case 2:
+			// Left.
+			instance_create_layer(x-12,y,"Instances",obj_attack_hitbox);
+			break;
+		case 3:
+			// Down.
+			instance_create_layer(x,y+8,"Instances",obj_attack_hitbox);
+			break;
+	}
+	
+}
+	
+function scr_character_hit(){
+	
+	var _kb_speed = round(enemy.knockback*(1-knockback_res));
+	
+	// Take knockback
+	hveloc = lengthdir_x(_kb_speed, veloc_dir);
+	vveloc = lengthdir_y(_kb_speed, veloc_dir);
+	
+	// Check collision.
+	scr_check_collision();
+	
+	x += hveloc;
+	y += vveloc;
+	
+	// End hit state if the alarm reaches 0.
+	if hit_alarm == 0 {
+		hit = false;
+		state = scr_character_walk;
+	}
+	
+	hit_alarm -= 1;
+	
+}
+	
+function scr_control_invulnerability(){
+	
+	if inv_alarm >= 0 {
+		invulnerability = true;
+	} else {
+		invulnerability = false;
+	}
+	
+	// Show an invulnerable effect if invulnerable.
+	if invulnerability == true {
+		if image_alpha <= 0 {
+			alpha_add = 0.05;
+		} else if image_alpha >= 1 {
+			alpha_add = -0.05;
+		}
+		image_alpha += alpha_add;
+	} else {
+		image_alpha = 1;	
+	}
+	
+	inv_alarm -= 1;
+	
 }

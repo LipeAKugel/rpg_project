@@ -24,4 +24,25 @@ dash_timer = dash_duration;
 // State
 state = scr_character_walk;
 
+// Combat
+space = 0;
+
+hit = false;
+hit_duration = 5;
+hit_alarm = 0;
+
+max_hp = 100;
+hp = max_hp;
+max_mana = 20;
+mana = max_mana;
+
+inv_alarm = 0;
+inv_duration = 120;
+invulnerability = false;
+
+defense = 1;
+knockback_res = 0;
+damage = 6;
+knockback = 4;
+
 
