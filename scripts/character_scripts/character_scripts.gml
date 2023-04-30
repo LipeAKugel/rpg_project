@@ -163,19 +163,19 @@ function scr_create_attack_hitbox(){
 	switch dir {
 		case 0:
 			// Right.
-			instance_create_layer(x+12,y,"Instances",obj_attack_hitbox);
+			instance_create_layer(x+14,y,"Instances",obj_attack_hitbox);
 			break;
 		case 1:
 			// Up.
-			instance_create_layer(x,y-12,"Instances",obj_attack_hitbox);
+			instance_create_layer(x,y-13,"Instances",obj_attack_hitbox);
 			break;
 		case 2:
 			// Left.
-			instance_create_layer(x-12,y,"Instances",obj_attack_hitbox);
+			instance_create_layer(x-14,y,"Instances",obj_attack_hitbox);
 			break;
 		case 3:
 			// Down.
-			instance_create_layer(x,y+8,"Instances",obj_attack_hitbox);
+			instance_create_layer(x,y+12,"Instances",obj_attack_hitbox);
 			break;
 	}
 	
@@ -227,4 +227,22 @@ function scr_control_invulnerability(){
 	
 	inv_alarm -= 1;
 	
+}
+	
+function scr_levelup() {
+	level_max_xp = [20,130,169,219,285,371,482,627,815,1060,1378,1792,2329,3028,3937,5118];
+	level_max_hp = [100,110,121,133,146,161,177,194,214,235,259,285,313,345,379,417];
+	level_max_mana = [20,22,24,26,29,32,35,38,42,47,51,57,62,69,75,83];
+	
+	xp -= level_max_xp[level-1];
+	level += 1;
+	
+	max_hp = level_max_hp[level-1];
+	max_mana = level_max_mana[level-1];
+	max_xp = level_max_xp[level-1];
+	
+	// Draw a LEVEL UP text in the game.
+	var _inst = instance_create_layer(x,y, "Instances", obj_lvlinfo);
+	_inst.x1 = x;
+	_inst.y1 = y;
 }

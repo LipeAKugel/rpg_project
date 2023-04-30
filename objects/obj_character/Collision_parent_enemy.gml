@@ -1,8 +1,8 @@
 /// @description Collision with enemy.
 
 if invulnerability == false {
-	
-	hp -= scr_calculate_damage(other.damage, defense);
+	var _damage = scr_calculate_damage(other.damage, defense);
+	hp -= _damage;
 	hit = true;
 	invulnerability = true;
 	inv_alarm = inv_duration;
@@ -10,6 +10,6 @@ if invulnerability == false {
 	enemy = other;
 	
 	// Show damage indicator.
-	scr_character_dmginfo();
+	scr_character_dmginfo(_damage);
 }
 

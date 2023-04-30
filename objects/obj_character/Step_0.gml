@@ -8,6 +8,11 @@ if state != scr_character_hit {
 // Control invulnerability.
 scr_control_invulnerability();
 
+// Level up if the xp reaches the max value.
+if xp >= max_xp {
+	scr_levelup();
+}
+
 // Run the current state.
 script_execute(state);
 

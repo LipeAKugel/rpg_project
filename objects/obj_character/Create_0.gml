@@ -27,6 +27,11 @@ state = scr_character_walk;
 // Combat
 space = 0;
 
+level = 1;
+max_xp = 20;
+xp = 0;
+
+
 hit = false;
 hit_duration = 5;
 hit_alarm = 0;

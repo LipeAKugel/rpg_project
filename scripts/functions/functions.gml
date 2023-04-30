@@ -18,18 +18,18 @@ function scr_check_collision(){
 
 }
 
-function scr_character_dmginfo(){
+function scr_character_dmginfo(damage){
 	var _inst = instance_create_layer(x,y, "Instances", obj_dmginfo);
 	_inst.x1 = obj_character.x;
 	_inst.y1 = obj_character.y;
-	_inst.damage = scr_calculate_damage(other.damage, defense);
+	_inst.damage = damage;
 }
 
-function scr_enemy_dmginfo(){
+function scr_enemy_dmginfo(damage){
 	var _inst = instance_create_layer(x,y, "Instances", obj_dmginfo);
 	_inst.x1 = other.x;
 	_inst.y1 = other.y;
-	_inst.damage = scr_calculate_damage(obj_character.damage, other.defense);
+	_inst.damage = damage;
 }
 
 function scr_calculate_damage(damage, defense){
